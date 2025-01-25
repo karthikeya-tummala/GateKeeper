@@ -17,6 +17,7 @@ export default function QRCodeScanner() {
         setQrResult(firstCode.rawValue);
 
         try {
+          setLoading(true);
           console.log("Sending scanned QR code to backend...");
           // Send the scanned QR code data to the backend
           const response = await sendBarcodeToBackend(firstCode.rawValue, setLoading);
@@ -33,6 +34,8 @@ export default function QRCodeScanner() {
           }
         } catch (error) {
           console.error("Error processing QR code:", error);
+        } finally {
+          setLoading(false);
         }
       } else {
         console.warn("No rawValue found in the detected QR Code.");
@@ -61,15 +64,21 @@ export default function QRCodeScanner() {
         <div className="max-w-md mx-auto">
           <h1 className="text-2xl font-bold text-center mb-4">Scan a QR Code</h1>
           <div className="aspect-square overflow-hidden rounded-lg border border-gray-300 shadow-md">
-            <Scanner
-                onScan={handleScan}
-                onError={handleError}
-                constraints={{ facingMode: 'environment' }}
-                classNames={{
-                  container: 'w-full h-full', // Applies to the scanner container
-                  video: 'rounded-lg', // Applies to the video stream element
-                }}
-            />
+            {!loading ? (
+                <Scanner
+                    onScan={handleScan}
+                    onError={handleError}
+                    constraints={{facingMode: 'environment'}}
+                    classNames={{
+                      container: 'w-full h-full',
+                      video: 'rounded-lg',
+                    }}
+                />
+            ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-lg font-bold text-blue-600">Processing...</p>
+                </div>
+            )}
           </div>
           <div className="mt-4 text-center">
             {qrResult ? (

@@ -87,7 +87,7 @@ export default function QRCodeScanner() {
                   <p className="text-gray-800 break-words">{qrResult}</p>
                 </div>
             ) : (
-                <p className="text-gray-500">No QR code scanned yet.</p>
+                <p className="text-gray-500">QR code not scanned yet.</p>
             )}
           </div>
         </div>

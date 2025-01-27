@@ -13,6 +13,7 @@ const sendBarcodeToBackend = async (
         const response = await Raxios.get("/", {
             params: { hash_code: value },
         });
+        alert(response);
 
         console.log("Received response from backend:", response.data); // Log the response received
         setLoading(false);

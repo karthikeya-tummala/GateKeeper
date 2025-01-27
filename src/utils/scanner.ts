@@ -10,7 +10,7 @@ const sendBarcodeToBackend = async (
     setLoading(true);
 
     try {
-        const response = await Raxios.get("/verify_user", {
+        const response = await Raxios.get("/", {
             params: { hash_code: value },
         });
 

@@ -13,11 +13,8 @@ const sendBarcodeToBackend = async (
         const response = await Raxios.get("/", {
             params: { hash_code: value },
         });
-        alert(response);
-
-        console.log("Received response from backend:", response.data); // Log the response received
         setLoading(false);
-        return response.data;
+        return response;
     } catch (err) {
         console.error("Error sending barcode to backend:", err); // Log the error
         message.error("Failed to send barcode. Please try again.");

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Scanner, IDetectedBarcode } from '@yudiel/react-qr-scanner';
 import { sendBarcodeToBackend } from "@/utils/scanner";
 
@@ -9,26 +9,17 @@ export default function QRCodeScanner() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleScan = async (detectedCodes: IDetectedBarcode[]) => {
-    console.log("Scanning for QR codes...");
     if (detectedCodes.length > 0) {
       const firstCode = detectedCodes[0]; // Get the first detected QR code
       if (firstCode.rawValue) {
-        alert(`Scanned QR code: ${firstCode.rawValue}`);
         setQrResult(firstCode.rawValue);
 
         try {
           setLoading(true);
-          console.log("Sending scanned QR code to backend...");
-          // Send the scanned QR code data to the backend
           const response = await sendBarcodeToBackend(firstCode.rawValue, setLoading);
 
-          console.log("Received response from backend:", response); // Log backend response
-
-          alert(`Response from backend: ${JSON.stringify(response)}`);
-
-          // Add further handling based on the response if needed
-          if (response.output_status === "SUCCESS") {
-            console.log("QR code is valid:", response.output_details);
+          if (response?.status === 200) {
+            setQrResult(response.data);
           } else {
             console.warn("QR code is invalid:", response.output_details);
           }
@@ -43,7 +34,6 @@ export default function QRCodeScanner() {
     }
   };
 
-  // Handle errors during scanning
   const handleError = (error: unknown) => {
     if (error instanceof Error) {
       if (error.name === 'NotAllowedError') {
@@ -57,7 +47,13 @@ export default function QRCodeScanner() {
     }
   };
 
-  console.log("Starting QR Code Scanner component...");
+  useEffect(() => {
+    if (!qrResult) return;
+    setTimeout(() => {
+      setQrResult(null)
+    }, 5000);
+  }, [qrResult]);
+
 
   return (
       <div className="container mx-auto p-4">
@@ -84,7 +80,7 @@ export default function QRCodeScanner() {
             {qrResult ? (
                 <div className="p-4 border rounded-lg bg-green-100">
                   <h2 className="text-lg font-bold">Scanned QR Code:</h2>
-                  <p className="text-gray-800 break-words">{qrResult}</p>
+                  <p className="text-gray-800 break-words">{qrResult.email}</p>
                 </div>
             ) : (
                 <p className="text-gray-500">QR code not scanned yet.</p>

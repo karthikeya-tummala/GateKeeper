@@ -14,6 +14,7 @@ const sendBarcodeToBackend = async (
             params: { hash_code: value },
         });
         setLoading(false);
+        console.log(response);
         return response;
     } catch (err) {
         console.error("Error sending barcode to backend:", err); // Log the error

@@ -20,7 +20,8 @@ A full-stack system for generating, emailing, and verifying QR-based tickets at 
 ## Setup
 
 ```bash
-git clone https://github.com/karthikeya-tummala/prerana-server.git
-cd prerana-server
+git clone https://github.com/karthikeya-tummala/GateKeeper.git
+cd GateKeeper
 npm install
 npm run dev
+
